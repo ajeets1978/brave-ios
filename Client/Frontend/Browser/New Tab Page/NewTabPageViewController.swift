@@ -144,6 +144,8 @@ class NewTabPageViewController: UIViewController, Themeable {
         background.changed = { [weak self] in
             self?.setupBackgroundImage()
         }
+        
+        Preferences.BraveToday.isEnabled.observe(from: self)
     }
     
     @available(*, unavailable)
@@ -477,7 +479,7 @@ class NewTabPageViewController: UIViewController, Themeable {
     // MARK: - Actions
     
     @objc private func tappedBraveTodaySettings() {
-        let controller = FeedSourceListViewController(dataSource: feedDataSource)
+        let controller = BraveTodaySettingsViewController(dataSource: feedDataSource)
         let container = UINavigationController(rootViewController: controller)
         present(container, animated: true)
     }
@@ -538,6 +540,17 @@ class NewTabPageViewController: UIViewController, Themeable {
         
         UIImpactFeedbackGenerator(style: .medium).bzzt()
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension NewTabPageViewController: PreferencesObserver {
+    func preferencesDidChange(for key: String) {
+        collectionView.reloadData()
+        if !isBraveTodayVisible {
+            collectionView.verticalScrollIndicatorInsets = .zero
+            braveTodayHeaderView.alpha = 0.0
+            backgroundButtonsView.alpha = 1.0
+        }
     }
 }
 
