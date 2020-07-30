@@ -19,8 +19,9 @@ private let HistoryClearableIndex = 0
 class ClearPrivateDataTableViewController: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     
-    var profile: Profile!
-    var tabManager: TabManager!
+    let profile: Profile
+    let tabManager: TabManager
+    let feedDataSource: FeedDataSource
     
     fileprivate var gotNotificationDeathOfAllWebViews = false
     
@@ -32,7 +33,8 @@ class ClearPrivateDataTableViewController: UITableViewController {
             (CacheClearable(), true),
             (CookiesAndCacheClearable(), true),
             (PasswordsClearable(profile: self.profile), true),
-            (DownloadsClearable(), true)
+            (DownloadsClearable(), true),
+            (BraveTodayClearable(feedDataSource: self.feedDataSource), true)
             ]
     }()
     
@@ -52,7 +54,11 @@ class ClearPrivateDataTableViewController: UITableViewController {
         }
     }
     
-    init() {
+    init(profile: Profile, tabManager: TabManager, feedDataSource: FeedDataSource) {
+        self.profile = profile
+        self.tabManager = tabManager
+        self.feedDataSource = feedDataSource
+        
         super.init(style: .grouped)
     }
     
