@@ -5,6 +5,7 @@
 import MobileCoreServices
 import Shared
 import UIKit
+import Deferred
 
 extension UIPasteboard {
     func addImageWithData(_ data: Data, forURL url: URL) {
